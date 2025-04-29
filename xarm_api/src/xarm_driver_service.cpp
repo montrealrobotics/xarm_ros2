@@ -41,7 +41,6 @@ namespace xarm_api
     void XArmDriver::_init_service(void)
     {
         node_->get_parameter_or("services.debug", service_debug_, false);
-
         // Call
         service_clean_error_ = _create_service<xarm_msgs::srv::Call>("clean_error", &XArmDriver::_clean_error);
         service_clean_warn_ = _create_service<xarm_msgs::srv::Call>("clean_warn", &XArmDriver::_clean_warn);

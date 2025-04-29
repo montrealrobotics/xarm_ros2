@@ -54,7 +54,7 @@ def launch_setup(context, *args, **kwargs):
     report_type = LaunchConfiguration('report_type', default='normal')
     dof = LaunchConfiguration('dof', default=7)
     hw_ns = LaunchConfiguration('hw_ns', default='xarm')
-    add_gripper = LaunchConfiguration('add_gripper', default=False)
+    add_gripper = LaunchConfiguration('add_gripper', default=True)
     add_vacuum_gripper = LaunchConfiguration('add_vacuum_gripper', default=False)
     prefix = LaunchConfiguration('prefix', default='')
     baud_checkset = LaunchConfiguration('baud_checkset', default=True)
