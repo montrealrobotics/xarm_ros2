@@ -51,6 +51,7 @@
     <!-- Load Common Material -->
     <xacro:include filename="$(find xarm_description)/urdf/common/common.material.xacro" />
     <xacro:common_material prefix="${prefix}"/>
+    <xacro:property name="M_PI" value="3.1415926535897931" />
 
     <!-- Specify Mesh file path -->
     <xacro:property name="mesh_suffix" value="${mesh_suffix}" scope="parent"/>
@@ -238,8 +239,12 @@
       <xacro:unless value="${robot_type == 'lite'}">
         <!-- Load XArm Gripper Model URDF -->
         <xacro:include filename="$(find xarm_description)/urdf/gripper/xarm_gripper_macro.xacro" />
-        <xacro:xarm_gripper_macro prefix="${prefix}" attach_to="${prefix}link_eef" 
-          ros2_control_plugin="${ros2_control_plugin}" dof="${dof}" hard_interface="${hard_interface}" />
+        <xacro:if value="${add_realsense_d435i}">
+          <xacro:xarm_gripper_macro prefix="${prefix}" attach_to="${prefix}camera_link" attach_xyz="-0.0287 -0.0175 -0.06746" attach_rpy="0 ${M_PI/2} 0" ros2_control_plugin="${ros2_control_plugin}" dof="${dof}" hard_interface="${hard_interface}" />
+        </xacro:if>
+        <xacro:unless value="${add_realsense_d435i}">
+          <xacro:xarm_gripper_macro prefix="${prefix}" attach_to="${prefix}link_eef" ros2_control_plugin="${ros2_control_plugin}" dof="${dof}" hard_interface="${hard_interface}" />
+        </xacro:unless>
       </xacro:unless>
     </xacro:if>
 
