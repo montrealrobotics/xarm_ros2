@@ -17,9 +17,15 @@
         origin_rpy="0 0 0" />
     </link>
 
-    <xacro:if value="${add_d435i_links}">
+    <link name="${prefix}camera_link"></link>
 
-      <link name="${prefix}camera_link"></link>
+    <joint name="${prefix}camera_link_joint" type="fixed">
+      <parent link="${prefix}link_eef" />
+      <child link="${prefix}camera_link" />
+      <origin xyz="0.06746 -0.0175 0.0337" rpy="${M_PI} ${-M_PI/2} 0" />
+    </joint>
+
+    <xacro:if value="${add_d435i_links}">
 
       <link name="${prefix}camera_depth_frame"></link>
 
