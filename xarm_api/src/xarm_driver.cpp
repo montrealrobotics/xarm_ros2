@@ -456,6 +456,8 @@ namespace xarm_api
     {
         xarm_gripper_init_loop_ = true;
         const auto goal = goal_handle->get_goal();
+        xarm_gripper_result_->reached_goal = false;
+        xarm_gripper_result_->stalled = false;
         RCLCPP_INFO(node_->get_logger(), "gripper_action_execute, position=%f, max_effort=%f", goal->command.position, goal->command.max_effort);
         
         int ret;
@@ -534,6 +536,7 @@ namespace xarm_api
                         cnt += 1;
                         if (cnt >= xarm_gripper_threshold_times_ && fabs(target_pos - curr_pos) < 15) {
                             xarm_gripper_result_->position = _xarm_gripper_pos_convert(curr_pos);
+                            xarm_gripper_result_->reached_goal = true;
                             try {
                                 goal_handle->succeed(xarm_gripper_result_);
                             } catch (std::exception &e) {
@@ -566,6 +569,8 @@ namespace xarm_api
         RCLCPP_INFO(node_->get_logger(), "move finish, curr_pos=%d", curr_pos);
         if (rclcpp::ok() && !is_succeed) {
             xarm_gripper_result_->position = _xarm_gripper_pos_convert(curr_pos);
+            xarm_gripper_result_->reached_goal = fabs(target_pos - curr_pos) < 15;
+            xarm_gripper_result_->stalled = !xarm_gripper_result_->reached_goal;
             try {
                 goal_handle->succeed(xarm_gripper_result_);
             } catch (std::exception &e) {
@@ -672,6 +677,8 @@ namespace xarm_api
     {
         bio_gripper_init_loop_ = true;
         const auto goal = goal_handle->get_goal();
+        bio_gripper_result_->reached_goal = false;
+        bio_gripper_result_->stalled = false;
         RCLCPP_INFO(node_->get_logger(), "bio_gripper_action_execute, position=%f, max_effort=%f", goal->command.position, goal->command.max_effort);
         
         int ret;
@@ -746,6 +753,7 @@ namespace xarm_api
                         cnt += 1;
                         if (cnt >= bio_gripper_threshold_times_ && fabs(target_pos - curr_pos) < 15) {
                             bio_gripper_result_->position = _bio_gripper_pos_convert(curr_pos);
+                            bio_gripper_result_->reached_goal = true;
                             try {
                                 goal_handle->succeed(bio_gripper_result_);
                             } catch (std::exception &e) {
@@ -778,6 +786,8 @@ namespace xarm_api
         RCLCPP_INFO(node_->get_logger(), "bio move finish, curr_pos=%d", curr_pos);
         if (rclcpp::ok() && !is_succeed) {
             bio_gripper_result_->position = _bio_gripper_pos_convert(curr_pos);
+            bio_gripper_result_->reached_goal = fabs(target_pos - curr_pos) < 15;
+            bio_gripper_result_->stalled = !bio_gripper_result_->reached_goal;
             try {
                 goal_handle->succeed(bio_gripper_result_);
             } catch (std::exception &e) {
